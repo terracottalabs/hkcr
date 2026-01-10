@@ -13,6 +13,22 @@ This repo provides both a **TypeScript/Bun CLI** and a **Python SDK** for search
 - Pretty table output or JSON
 - Zero external dependencies
 
+## Python SDK
+
+### Install
+
+```bash
+pip install hkcr
+```
+
+### CLI Usage
+
+```bash
+hkcr "Kangaroo Limited"           # Search local companies
+hkcr "Kangaroo Limited" -j        # JSON output
+hkcr -b C1572528       # Search by BRN
+```
+
 ## TypeScript CLI
 
 ### Install
@@ -24,34 +40,6 @@ bun run build
 
 # Add to PATH
 cp dist/hkcr /usr/local/bin/
-```
-
-### Usage
-
-```bash
-hkcr "China"           # Search local companies
-hkcr -f "HSBC"         # Search foreign companies
-hkcr -b C1572528       # Search by BRN
-hkcr "China" -j        # JSON output
-hkcr -h                # Help
-```
-
-## Python SDK
-
-### Install
-
-```bash
-cd python
-pip install -e .
-```
-
-### CLI Usage
-
-```bash
-hkcr "China"           # Search local companies
-hkcr -f "HSBC"         # Search foreign companies
-hkcr -b C1572528       # Search by BRN
-hkcr "China" -j        # JSON output
 ```
 
 ### Library Usage
