@@ -43,3 +43,6 @@ build/
 *.egg
 .venv/
 venv/
+
+demo.gif
+demo.tape

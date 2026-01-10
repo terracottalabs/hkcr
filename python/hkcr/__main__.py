@@ -7,45 +7,71 @@ from dataclasses import asdict
 from .api import search_local, search_foreign
 from .types import SearchOptions
 
-def truncate(s: str, length: int) -> str:
+def wrap_text(s: str, width: int) -> list[str]:
+    """Wrap text to fit within width, returning list of lines."""
     if not s:
-        return ""
-    return s[:length-1] + "…" if len(s) > length else s
+        return [""]
+    words = s.split()
+    lines = []
+    current = ""
+    for word in words:
+        if not current:
+            current = word
+        elif len(current) + 1 + len(word) <= width:
+            current += " " + word
+        else:
+            lines.append(current)
+            current = word
+    if current:
+        lines.append(current)
+    return lines if lines else [""]
 
 def format_local_table(companies) -> str:
     if not companies:
         return "No results found."
     cols = [
-        ("brn", "BRN", 12),
-        ("english_name", "English Name", 40),
-        ("chinese_name", "Chinese Name", 20),
-        ("company_type", "Type", 20),
+        ("brn", "BRN", 10),
+        ("english_name", "English Name", 30),
+        ("chinese_name", "Chinese Name", 16),
+        ("company_type", "Type", 18),
         ("date_of_incorporation", "Incorporated", 12),
     ]
     header = " │ ".join(h.ljust(w) for _, h, w in cols)
     divider = "─┼─".join("─" * w for _, _, w in cols)
     rows = []
     for co in companies:
-        row = " │ ".join(truncate(getattr(co, k) or "", w).ljust(w) for k, _, w in cols)
-        rows.append(row)
+        wrapped = [wrap_text(getattr(co, k) or "", w) for k, _, w in cols]
+        max_lines = max(len(w) for w in wrapped)
+        for i in range(max_lines):
+            row_parts = []
+            for j, (_, _, w) in enumerate(cols):
+                line = wrapped[j][i] if i < len(wrapped[j]) else ""
+                row_parts.append(line.ljust(w))
+            rows.append(" │ ".join(row_parts))
     return "\n".join([header, divider] + rows)
 
 def format_foreign_table(companies) -> str:
     if not companies:
         return "No results found."
     cols = [
-        ("brn", "BRN", 12),
-        ("corporate_name", "Corporate Name", 35),
-        ("hk_name", "HK Name", 25),
-        ("place_of_incorporation", "Origin", 15),
+        ("brn", "BRN", 10),
+        ("corporate_name", "Corporate Name", 30),
+        ("hk_name", "HK Name", 20),
+        ("place_of_incorporation", "Origin", 12),
         ("date_of_registration", "Registered", 12),
     ]
     header = " │ ".join(h.ljust(w) for _, h, w in cols)
     divider = "─┼─".join("─" * w for _, _, w in cols)
     rows = []
     for co in companies:
-        row = " │ ".join(truncate(getattr(co, k) or "", w).ljust(w) for k, _, w in cols)
-        rows.append(row)
+        wrapped = [wrap_text(getattr(co, k) or "", w) for k, _, w in cols]
+        max_lines = max(len(w) for w in wrapped)
+        for i in range(max_lines):
+            row_parts = []
+            for j, (_, _, w) in enumerate(cols):
+                line = wrapped[j][i] if i < len(wrapped[j]) else ""
+                row_parts.append(line.ljust(w))
+            rows.append(" │ ".join(row_parts))
     return "\n".join([header, divider] + rows)
 
 def main():

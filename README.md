@@ -2,6 +2,8 @@
 
 Search the Hong Kong Companies Registry.
 
+![Demo](https://vhs.charm.sh/vhs-4ieVtxA6xxvAySbH7G99SN.gif)
+
 This repo provides both a **TypeScript/Bun CLI** and a **Python SDK** for searching company information from the [HK Companies Registry](https://data.gov.hk/en-data/dataset/hk-cr-crdata-list-addr).
 
 ## Features
